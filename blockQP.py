@@ -21,8 +21,6 @@ from graphData import *
 from derivative import *
 # from coverageProbability import get_optimal_coverage_prob, objective_function_matrix_form, dobj_dx_matrix_form, obj_hessian_matrix_form
 
-import qpthnew
-
 def learnEdgeProbs_simple(train_data, validate_data, test_data, lr=0.1, learning_model='random_walk_distribution', block_selection='coverage',
                           n_epochs=150, batch_size=100, optimizer='adam', omega=4, training_method='two-stage', max_norm=0.1, block_cut_size=0.5):
     
@@ -345,7 +343,6 @@ def getDefUtility(single_data, unbiased_probs_pred, path_model, cut_size, omega=
         p = jac.view(1, -1) - Q_regularized @ pred_optimal_coverage[edge_set]
  
         try:
-            # qp_solver = qpthnew.qp.QPFunction(correction_term, previous_gradient)
             qp_solver = qpth.qp.QPFunction()
             coverage_qp_solution = qp_solver(Q_regularized, p, G_matrix, h_matrix, A_matrix, b_matrix)[0]       # Default version takes 1/2 x^T Q x + x^T p; not 1/2 x^T Q x + x^T p
             full_coverage_qp_solution = pred_optimal_coverage.clone()
